@@ -1,3 +1,26 @@
+
+
+const RULES={
+  REQUIRED:'required',
+  NUMBER:'number',
+  EMAIL:'email'
+}
+const MESSAGES_CLASSNAME = 'validator-messages'
+
+const removeMessageErrorElement=(element)=>{
+  ///remove old message element
+  // onemoguci ponavljanje vise required poruka
+  // nakon visestrukog submita
+  let oldMessageElement=
+  // prodji kroz formu
+    element.querySelector( `#${MESSAGES_CLASSNAME}`)
+
+  if(oldMessageElement){
+    oldMessageElement.remove()
+  }
+  // dodaje samo 1 poruku nakon submit
+  console.log('old',oldMessageElement);
+}
 const MyDirectives={
   install:function(Vue){
     Vue.directive('focusOn',{
@@ -18,11 +41,8 @@ const MyDirectives={
     //  v-validate:reqired.email
     Vue.directive('validate',{
       inserted: function(element,binding){
-        const RULES={
-          REQUIRED:'required',
-          NUMBER:'number',
-          EMAIL:'email'
-        }
+        
+        
         //   objekat koji ima key,svaki input
         let validationRules=binding.value
         
@@ -44,19 +64,45 @@ const MyDirectives={
         element.addEventListener('submit',(event)=>{
           
           event.preventDefault()
+          // console.log(Object.keys(validationRules),'validation Rules')
           
           Object.keys(validationRules).forEach(key => {
+            
+            // pronadji elem uz pomoc
+            let input=element.querySelector( `#${key}`)
+            // ubaci esception
+            // ukoliko ne postoji input
+            if(!input){
+              throw new Error(`Element for validation rule ${key}
+              not found`)
+            }
+            
             // da li elem postoji u nizu
-            if(  validationRules[key].indexOf(RULES.REQUIRED)> -1){
+            if(validationRules[key].indexOf(RULES.REQUIRED) > -1 &&
+            !input.value.length){
               
               let messageElement = document.createElement('div')
+              messageElement.id = MESSAGES_CLASSNAME
+
+
+
+              //remove old message element
+              removeMessageErrorElement(element)
+              
+              
+              
               messageElement.innerHTML=`This field ${key.toUpperCase()} is required`
               // dodajem u formu ukoliko je required
               element.appendChild(messageElement)
               
+            }else{
+              removeMessageErrorElement(element)
             }
+              
+              
+            
           });
-          event.preventDefault()
+          // event.preventDefault()
         })
       }
       

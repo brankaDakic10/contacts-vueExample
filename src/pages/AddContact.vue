@@ -34,7 +34,7 @@
         <label for="email" class="col-4 col-form-label">Email</label>
         <div class="col-8">
           <input id="email" name="email" 
-          type="email"
+          type="text"
            class="form-control here"
             v-model="contact.email">
         </div>
@@ -74,7 +74,10 @@ export default {
       },
       // focus:false
       validationRules:{
-        email:['reqired','email']
+        email:['required','email'],
+// dodali da proverimo za throw Error ako neko pravilo tj input nije def
+// u nizu sa valid pravila validationRules
+        // bb:[]
       }
     }
   },
