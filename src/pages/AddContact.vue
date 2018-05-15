@@ -1,8 +1,6 @@
 <template>
   <div class="container mt-4">
-    <form
-   
-     v-validate="validationRules">
+    <form v-validate="validationConfig">
       <div class="form-group row">
         <label for="first_name" class="col-4 col-form-label">First Name</label>
         <div class="col-8">
@@ -13,8 +11,7 @@
              type="text"  
              class="form-control here" 
              v-model="contact.first_name" 
-             v-focus-on
-             v-validate>
+             v-focus-on>
               <!-- v-focus-on:write.name.email="focus" -->
              
           </div>
@@ -72,16 +69,16 @@ export default {
         email: '',
         number: ''
       },
-      // focus:false
-      validationRules:{
-        email:['required','email'],
-// dodali da proverimo za throw Error ako neko pravilo tj input nije def
-// u nizu sa valid pravila validationRules
-        // bb:[]
+      validationConfig:{
+        validationRules:{
+          email:['required','email'],
+        },
+        submitCallBack:()=>{
+          this.onSubmit()
+        }
       }
     }
   },
-
   created () {
     if (this.$route.params.id) {
       contacts.get(this.$route.params.id)
